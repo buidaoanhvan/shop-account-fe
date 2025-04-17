@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "../lib/store/auth-store";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
+import { isTokenExpired } from "../utils/token";
 import Image from "next/image";
 
 export function LoginGoogle() {
@@ -62,7 +63,7 @@ export function LoginGoogle() {
       callLoginKeyAPI(key);
     }
     setMounted(true);
-  }, [searchParams]); // Chạy lại khi searchParams thay đổi
+  }, [searchParams]);
 
   if (!mounted)
     return (
@@ -80,6 +81,7 @@ export function LoginGoogle() {
               width={48}
               height={48}
               className="rounded-full"
+              priority
             />
           </PopoverButton>
           <PopoverPanel

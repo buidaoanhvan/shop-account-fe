@@ -11,7 +11,8 @@ export default function Home() {
           alt="Logo"
           width={1563}
           height={658}
-          className="w-full h-[658px] object-cover"
+          className="w-full object-cover"
+          priority
         />
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 container">
           <div className="grid grid-cols-4 gap-4">
@@ -23,9 +24,9 @@ export default function Home() {
                 Thuê VietMap Live Pro
               </h1>
               <p className="text-xl text-white max-w-[700px]">
-                Dịch vụ cho thuê VietMap Live Pro theo ngày, giá chỉ 
-                <span className="font-bold"> 10.000đ/ngày</span>, không cần thiết bị. Theo dõi hành trình xe
-                real-time
+                Dịch vụ cho thuê VietMap Live Pro theo ngày, giá chỉ
+                <span className="font-bold"> 10.000đ/ngày</span>, không cần
+                thiết bị. Theo dõi hành trình xe real-time
               </p>
             </div>
             <div className="col-span-1"></div>

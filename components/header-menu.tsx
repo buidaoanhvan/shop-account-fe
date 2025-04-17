@@ -7,7 +7,7 @@ export function HeaderMenu() {
   return (
     <div className="p-6 shadow">
       <div className="container flex justify-between items-center mx-auto">
-        <h1 className="font-bold text-2xl">Shop Tài Khoản</h1>
+        <h1 className="font-bold text-2xl">DEV</h1>
         <div className="flex gap-8 items-center">
           <Link href="/">Trang chủ</Link>
           <Link href="/">Cửa hàng</Link>
