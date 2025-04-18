@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import "./globals.css";
+import { LoginGoogleModal } from "../../components/login-google-modal";
 
 const geistMontser = Montserrat({
   subsets: ["latin"],
@@ -20,7 +21,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
-      <body className={`${geistMontser.variable} antialiased`}>{children}</body>
+      <body className={`${geistMontser.variable} antialiased`}>
+        <LoginGoogleModal />
+        {children}
+      </body>
     </html>
   );
 }

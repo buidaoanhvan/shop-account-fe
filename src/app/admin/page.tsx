@@ -1,6 +1,6 @@
 "use client";
 import { useRef, useState, useEffect } from "react";
-import { useAuthStore } from "../../../lib/store/auth-store";
+import { fetcher } from "../../../utils/fetcher";
 
 export default function Admin() {
   const modal_new_service = useRef<HTMLDialogElement>(null);
@@ -10,7 +10,6 @@ export default function Admin() {
   const [service_description, setService_description] = useState("");
   const [provider, setProvider] = useState("");
   const [category_id, setCategory_id] = useState("");
-  const { token, clearAuth } = useAuthStore();
   const [refresh, setRefresh] = useState(false);
 
   const addItem = () => {
@@ -58,28 +57,15 @@ export default function Admin() {
       category_id: category_id,
       items: items,
     };
-    const response = await fetch("http://localhost:3333/service/create", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(payLoad),
-    });
-    const data = await response.json();
-    if (data.statusCode == 401) {
-      clearAuth();
-    }
-    if (data.errorCode == "00") {
-      setRefresh((prev) => !prev); // Toggle để trigger useEffect
-    }
+    await fetcher("http://localhost:3333/service/create", "POST", payLoad);
     modal_new_service.current?.close();
+    setRefresh(!refresh);
   };
 
   const getService = async () => {
-    const response = await fetch("http://localhost:3333/service/get");
-    const data = await response.json();
-    setList_service(data.data);
+    const response = await fetcher("http://localhost:3333/service/get");
+    if (!response) return;
+    setList_service(response.data);
   };
 
   useEffect(() => {

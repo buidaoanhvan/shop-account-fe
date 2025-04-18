@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "../lib/store/auth-store";
 import { Popover, PopoverButton, PopoverPanel } from "@headlessui/react";
-import { isTokenExpired } from "../utils/token";
 import Image from "next/image";
+import { fetcher } from "../utils/fetcher";
 
 export function LoginGoogle() {
   const searchParams = useSearchParams();
@@ -12,49 +12,35 @@ export function LoginGoogle() {
   const { token, user, setToken, setUser, clearAuth } = useAuthStore();
   const [mounted, setMounted] = useState(false);
 
-  const callGetUserAPI = async (token: string) => {
-    try {
-      const response = await fetch("http://localhost:3333/user/profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      if (data.errorCode == "00" && data.success) {
-        setUser(data.data);
-      }
-    } catch (error) {
-      console.error("Error fetching API:", error);
+  const callGetUserAPI = async () => {
+    const response = await fetcher(
+      "http://localhost:3333/user/profile",
+      "POST"
+    );
+    if (response.errorCode == "00" && response.success) {
+      setUser(response.data);
     }
   };
 
   const callLoginKeyAPI = async (key: string) => {
-    try {
-      const response = await fetch(
-        "http://localhost:3333/auth/provider/login",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ key }),
-        }
-      );
-      const data = await response.json();
-      if (data.errorCode == "00" && data.success) {
-        setToken(data.data.token);
-        callGetUserAPI(data.data.token);
-      }
-      router.push("/");
-    } catch (error) {
-      console.error("Error fetching API:", error);
+    const payLoad = {
+      key,
+    };
+    const response = await fetcher(
+      "http://localhost:3333/auth/provider/login",
+      "POST",
+      payLoad
+    );
+    if (response.errorCode == "00" && response.success) {
+      setToken(response.data.token);
+      callGetUserAPI();
     }
+    router.push("/");
   };
 
   const logoutUser = () => {
     clearAuth();
+    router.push("/");
   };
 
   useEffect(() => {
